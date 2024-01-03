@@ -1,0 +1,112 @@
+import javax.print.attribute.standard.PresentationDirection;
+import java.util.LinkedList;
+
+public class HashDictionary implements DictionaryADT{
+    private int size;
+    private LinkedList[] hashDictionary;
+
+
+    public HashDictionary(int size) {
+        this.size = size;
+        this.hashDictionary = new LinkedList[size];
+
+        for (int i = 0; i < size; i++) {
+            hashDictionary[i] = new LinkedList();
+        }
+    }
+
+//    public int hash(String key) {
+//        int hash = 0;
+//        char[] charArray = key.toCharArray();
+//        for (int i = 0; i < charArray.length; i++) {
+//            int asciiValue = charArray[i];
+//            hash = (hash + asciiValue * 23) % hashDictionary.length;
+//
+//        }
+//        return hash;
+//    }
+    public int hash(String key) {
+        int primeNumber = 31;
+        int hash = 0;
+
+        for (int i = 0; i < key.length(); i++) {
+            hash = primeNumber*hash + key.charAt(i);
+        }
+        return hash;
+    }
+
+//    public int hash(String key) {
+//        char[] charArray = key.toCharArray();
+//        int hash = (int);
+//
+//        for (int i = charArray.length-2; i < 0; i--) {
+//            int asciiValue = charArray[i];
+//            hash = (hash + asciiValue * 23) % hashDictionary.length;
+//
+//        }
+//        return hash;
+//    }
+
+
+    public int put(Data record) throws DictionaryException {
+        int recordHashValue = hash(record.getConfiguration());
+
+        if (hashDictionary[recordHashValue] != null) {
+            for (int i = 0; i < hashDictionary[recordHashValue].size(); i++) {
+                Data dataComparison =  (Data) hashDictionary[recordHashValue].get(i);
+                if (dataComparison.getConfiguration().equals(record.getConfiguration())) {
+                    throw new DictionaryException();
+                }
+
+            }
+            hashDictionary[recordHashValue].add(record);
+            return 1;
+        }else {
+            LinkedList listIfNull = hashDictionary[recordHashValue];
+            listIfNull.add(record);
+            hashDictionary[recordHashValue] = listIfNull;
+        }
+        return 0;
+    }
+
+
+        public void remove (String config) throws DictionaryException {
+
+        }
+        public int get (String config){
+            int hashGet = hash(config);
+            if (hashDictionary[hashGet] != null){
+                for (int i = 0; i < hashDictionary[hashGet].size(); i++){
+                    if (hashDictionary[hashGet].get(i).equals(config)){
+//                        hashDictionary[hashGet].get(i)
+
+
+                        }
+                    }
+                }
+            return hashGet;
+        }
+
+        public int numRecords () {
+
+            return 0;
+        }
+    }
+
+
+public class Data {
+    private int score;
+    private String config;
+    public Data(String config, int score){
+        this.config = config;
+        this.score = score;
+
+    }
+    public int getScore() {
+        return this.score;
+    }
+    public String getConfiguration() {
+        return this.config;
+    }
+
+}
